@@ -1,30 +1,10 @@
-import path, { join } from "path";
+import path from "path";
 import { app, BrowserWindow, shell, ipcMain } from "electron";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
-import { readdirSync, readFileSync } from "fs";
-import { Photo } from "types";
-
-const ignore = [".DS_Store"];
-
-function getNestedFiles(dir: string, fileList: Partial<Photo>[] = []) {
-  const files = readdirSync(dir, { withFileTypes: true });
-  for (const file of files) {
-    if (file.isFile() && !ignore.includes(file.name)) {
-      fileList.push({
-        path: join(dir, file.name),
-        data: `data:image/png;base64,${readFileSync(
-          join(dir, file.name)
-        ).toString("base64")}`,
-      });
-    } else if (file.isDirectory()) {
-      getNestedFiles(path.join(dir, file.name), fileList);
-    }
-  }
-  return fileList;
-}
+import { getGallery } from "./fs";
 
 class AppUpdater {
   constructor() {
@@ -38,7 +18,7 @@ let mainWindow: BrowserWindow | null = null;
 
 ipcMain.on("photos", async (event, search) => {
   search = search.toLowerCase();
-  const files = getNestedFiles(join(__dirname, "../../../../Desktop/YES"));
+  const files = await getGallery();
   const filtered = files.filter(
     (f) =>
       f.path?.toLocaleLowerCase().includes(search) ||
