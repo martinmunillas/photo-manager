@@ -36,9 +36,15 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on("photos", async (event) => {
+ipcMain.on("photos", async (event, search) => {
+  search = search.toLowerCase();
   const files = getNestedFiles(join(__dirname, "../../../../Desktop/YES"));
-  event.reply("photos", files);
+  const filtered = files.filter(
+    (f) =>
+      f.path?.toLocaleLowerCase().includes(search) ||
+      f.tags?.join("::").toLowerCase().includes(search)
+  );
+  event.reply("photos", filtered);
 });
 
 if (process.env.NODE_ENV === "production") {

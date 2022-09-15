@@ -4,12 +4,14 @@ import {
   extendTheme,
   Grid,
   Heading,
+  Input,
   QuaantumProvider,
   theme,
 } from "@quaantum/components";
 import { useState } from "react";
 import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
 import { Photo } from "types";
+import { useDebounce } from "./hooks/useDebounce";
 import { usePhotos } from "./hooks/usePhotos";
 import Sidebar from "./Sidebar";
 
@@ -110,13 +112,22 @@ const photoTheme = extendTheme(theme, {
 
 const Hello = () => {
   const [selected, setSelected] = useState<Photo | null>(null);
-  const photos = usePhotos();
+  const [search, setSearch] = useState("");
+  const query = useDebounce(search, 100);
+  const photos = usePhotos(query);
   return (
-    <Box>
+    <Box padding="32px">
       <Heading>Muni Photo Manager</Heading>
+      <Input
+        my="16px"
+        mx="9px"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
       <Grid
         gap="16px"
         gridTemplateColumns="repeat(auto-fit, minmax(200px, 1fr))"
+        placeItems="stretch"
       >
         {photos.map((photo) => (
           <Button
@@ -125,7 +136,7 @@ const Hello = () => {
             }}
             key={photo.path}
             bg="none"
-            p="10px"
+            p="8px"
             border="1px solid"
             borderColor={
               selected?.path === photo.path ? "white.light" : "transparent"
