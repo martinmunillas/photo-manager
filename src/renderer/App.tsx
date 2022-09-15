@@ -92,6 +92,19 @@ const photoTheme = extendTheme(theme, {
       },
       variants: {},
     },
+    Button: {
+      base: {
+        cursor: "pointer",
+        r: "8px",
+        p: "8px",
+        b: "none",
+        bgColor: "secondary",
+        _focus: {
+          outline: "none",
+        },
+      },
+      variants: {},
+    },
   },
 });
 

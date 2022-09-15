@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   Img,
   Input,
@@ -32,6 +33,11 @@ const Sidebar: React.FC<SidebarProps> = ({ photo, onClose }) => {
       p="16px"
     >
       <Flex direction="column" gap="16px">
+        <Flex justify="end">
+          <Button minW="32px" minH="32px" onClick={onClose}>
+            X
+          </Button>
+        </Flex>
         <Box w="100%">
           {photo.data && <Img src={photo.data} alt="" d="block" maxW="100%" />}
         </Box>
