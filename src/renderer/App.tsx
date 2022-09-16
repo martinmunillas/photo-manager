@@ -1,8 +1,6 @@
 import {
   Box,
-  Button,
   extendTheme,
-  Grid,
   Heading,
   Input,
   QuaantumProvider,
@@ -10,15 +8,17 @@ import {
 } from "@quaantum/components";
 import { useState } from "react";
 import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
-import { Photo } from "types";
 import { useDebounce } from "./hooks/useDebounce";
 import { usePhotos } from "./hooks/usePhotos";
-import Sidebar from "./Sidebar";
+import Sidebar from "./components/Sidebar";
+import Gallery from "./components/Gallery";
+import { Photo } from "types";
 
 const photoTheme = extendTheme(theme, {
   global: {
     body: {
       bgColor: "black.dark",
+      width: "100vw",
     },
     "*": {
       boxSizing: "border-box",
@@ -116,45 +116,23 @@ const Hello = () => {
   const query = useDebounce(search, 100);
   const photos = usePhotos(query);
   return (
-    <Box padding="32px">
-      <Heading>Muni Photo Manager</Heading>
-      <Input
-        my="16px"
-        mx="9px"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <Grid
-        gap="16px"
-        gridTemplateColumns="repeat(auto-fit, minmax(200px, 1fr))"
-        placeItems="stretch"
+    <>
+      <Sidebar photo={selected} onClose={() => setSelected(null)} />
+      <Box
+        padding="32px"
+        width={selected ? "60vw" : "100vw"}
+        transition="width 200ms ease"
       >
-        {photos.map((photo) => (
-          <Button
-            onClick={() => {
-              setSelected(photo);
-            }}
-            key={photo.path}
-            bg="none"
-            p="8px"
-            border="1px solid"
-            borderColor={
-              selected?.path === photo.path ? "white.light" : "transparent"
-            }
-            r="8px"
-            _hover={{
-              borderColor:
-                selected?.path === photo.path ? "white.light" : "white.dark",
-            }}
-          >
-            <img width="200" alt="icon" src={photo.data} />
-          </Button>
-        ))}
-      </Grid>
-      {selected && (
-        <Sidebar photo={selected} onClose={() => setSelected(null)} />
-      )}
-    </Box>
+        <Heading>Muni Photo Manager</Heading>
+        <Input
+          my="16px"
+          mx="9px"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Gallery photos={photos} selected={selected} onClick={setSelected} />
+      </Box>
+    </>
   );
 };
 

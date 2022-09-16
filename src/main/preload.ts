@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
-export type Channels = "photos";
+export type Channels = "photos" | "photo" | "refresh" | "updatePhoto";
 
 contextBridge.exposeInMainWorld("electron", {
   ipcRenderer: {

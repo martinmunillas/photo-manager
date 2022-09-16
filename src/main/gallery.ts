@@ -47,7 +47,11 @@ interface ImageMeta {
   };
 }
 
-export const getGallery = async () => {
+let gallery: Photo[] = [];
+
+export const getGallery = () => gallery;
+
+const genGallery = async () => {
   try {
     const all = getNestedFiles(join(__dirname, "../../../../Desktop/YES"));
     const saved = store.get("gallery", []);
@@ -62,7 +66,6 @@ export const getGallery = async () => {
             resolve(meta);
           });
         });
-        console.log(data);
         saved.push({
           path,
           tags: [],
@@ -81,4 +84,13 @@ export const getGallery = async () => {
     console.log(error);
     return [];
   }
+};
+
+export const refreshGallery = async () => {
+  gallery = await genGallery();
+};
+
+export const commitGallery = (g: Photo[]) => {
+  store.set("gallery", g);
+  gallery = g;
 };

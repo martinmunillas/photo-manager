@@ -4,7 +4,7 @@ import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
-import { getGallery } from "./fs";
+import { commitGallery, getGallery, refreshGallery } from "./gallery";
 
 class AppUpdater {
   constructor() {
@@ -18,13 +18,33 @@ let mainWindow: BrowserWindow | null = null;
 
 ipcMain.on("photos", async (event, search) => {
   search = search.toLowerCase();
-  const files = await getGallery();
-  const filtered = files.filter(
+  await refreshGallery();
+  const filtered = getGallery().filter(
     (f) =>
       f.path?.toLocaleLowerCase().includes(search) ||
+      f.name?.toLocaleLowerCase().includes(search) ||
+      f.description?.toLocaleLowerCase().includes(search) ||
       f.tags?.join("::").toLowerCase().includes(search)
   );
   event.reply("photos", filtered);
+});
+
+ipcMain.on("photo", (event, path) => {
+  const photo = getGallery().find((f) => f.path === path);
+  event.reply("photo", photo);
+});
+
+ipcMain.on("refresh", async () => {
+  refreshGallery();
+});
+
+ipcMain.on("updatePhoto", (_, photo) => {
+  const gallery = getGallery();
+  const index = gallery.findIndex((f) => f.path === photo.path);
+  if (index > -1) {
+    gallery[index] = photo;
+  }
+  commitGallery(gallery);
 });
 
 if (process.env.NODE_ENV === "production") {
