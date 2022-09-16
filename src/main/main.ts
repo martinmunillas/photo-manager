@@ -5,6 +5,7 @@ import log from "electron-log";
 import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
 import { commitGallery, getGallery, refreshGallery } from "./gallery";
+import { addPerson, deletePerson, editPerson, getPeople } from "./people";
 
 class AppUpdater {
   constructor() {
@@ -45,6 +46,24 @@ ipcMain.on("updatePhoto", (_, photo) => {
     gallery[index] = photo;
   }
   commitGallery(gallery);
+});
+
+ipcMain.on("people", (event) => {
+  event.reply("people", getPeople());
+});
+
+ipcMain.on("person", (event, person) => {
+  if (!person.id) {
+    addPerson(person);
+  } else {
+    editPerson(person);
+  }
+  event.reply("people", getPeople());
+});
+
+ipcMain.on("deletePerson", (event, id) => {
+  deletePerson(id);
+  event.reply("people", getPeople());
 });
 
 if (process.env.NODE_ENV === "production") {

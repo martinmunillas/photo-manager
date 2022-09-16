@@ -1,18 +1,7 @@
-import {
-  Box,
-  extendTheme,
-  Heading,
-  Input,
-  QuaantumProvider,
-  theme,
-} from "@quaantum/components";
-import { useState } from "react";
+import { extendTheme, QuaantumProvider, theme } from "@quaantum/components";
 import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
-import { useDebounce } from "./hooks/useDebounce";
-import { usePhotos } from "./hooks/usePhotos";
-import Sidebar from "./components/Sidebar";
-import Gallery from "./components/Gallery";
-import { Photo } from "types";
+import Home from "./pages/Home";
+import People from "./pages/People";
 
 const photoTheme = extendTheme(theme, {
   global: {
@@ -100,6 +89,8 @@ const photoTheme = extendTheme(theme, {
         r: "8px",
         p: "8px",
         b: "none",
+        color: "white",
+        textDecoration: "none",
         bgColor: "secondary",
         _focus: {
           outline: "none",
@@ -107,41 +98,25 @@ const photoTheme = extendTheme(theme, {
       },
       variants: {},
     },
+    Heading: {
+      base: {
+        color: "primary",
+        fontSize: "24px",
+        fontWeight: "bold",
+        textDecoration: "none",
+      },
+      variants: {},
+    },
   },
 });
-
-const Hello = () => {
-  const [selected, setSelected] = useState<Photo | null>(null);
-  const [search, setSearch] = useState("");
-  const query = useDebounce(search, 100);
-  const photos = usePhotos(query);
-  return (
-    <>
-      <Sidebar photo={selected} onClose={() => setSelected(null)} />
-      <Box
-        padding="32px"
-        width={selected ? "60vw" : "100vw"}
-        transition="width 200ms ease"
-      >
-        <Heading>Muni Photo Manager</Heading>
-        <Input
-          my="16px"
-          mx="9px"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <Gallery photos={photos} selected={selected} onClick={setSelected} />
-      </Box>
-    </>
-  );
-};
 
 export default function App() {
   return (
     <QuaantumProvider theme={photoTheme}>
       <Router>
         <Routes>
-          <Route path="/" element={<Hello />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/people" element={<People />} />
         </Routes>
       </Router>
     </QuaantumProvider>

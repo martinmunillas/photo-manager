@@ -7,10 +7,11 @@ export interface Photo {
   description: string;
   date: MyDate;
   tags: string[];
-  people: People[];
+  people: Person[];
 }
 
-export interface People {
+export interface Person {
+  id: number;
   name: string;
   tags: string[];
 }
