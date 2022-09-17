@@ -7,7 +7,10 @@ export type Channels =
   | "updatePhoto"
   | "people"
   | "person"
-  | "deletePerson";
+  | "deletePerson"
+  | "albums"
+  | "album"
+  | "deleteAlbum";
 
 contextBridge.exposeInMainWorld("electron", {
   ipcRenderer: {

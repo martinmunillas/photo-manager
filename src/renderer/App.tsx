@@ -1,5 +1,6 @@
 import { extendTheme, QuaantumProvider, theme } from "@quaantum/components";
 import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
+import Albums from "./pages/Albums";
 import Home from "./pages/Home";
 import People from "./pages/People";
 
@@ -117,6 +118,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/people" element={<People />} />
+          <Route path="/albums" element={<Albums />} />
         </Routes>
       </Router>
     </QuaantumProvider>

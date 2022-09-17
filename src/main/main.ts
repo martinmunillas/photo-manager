@@ -6,6 +6,7 @@ import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
 import { commitGallery, getGallery, refreshGallery } from "./gallery";
 import { addPerson, deletePerson, editPerson, getPeople } from "./people";
+import { addAlbum, deleteAlbum, editAlbum, getAlbums } from "./album";
 
 class AppUpdater {
   constructor() {
@@ -64,6 +65,24 @@ ipcMain.on("person", (event, person) => {
 ipcMain.on("deletePerson", (event, id) => {
   deletePerson(id);
   event.reply("people", getPeople());
+});
+
+ipcMain.on("albums", (event) => {
+  event.reply("albums", getAlbums());
+});
+
+ipcMain.on("album", (event, album) => {
+  if (!album.id) {
+    addAlbum(album);
+  } else {
+    editAlbum(album);
+  }
+  event.reply("albums", getAlbums());
+});
+
+ipcMain.on("deleteAlbum", (event, id) => {
+  deleteAlbum(id);
+  event.reply("albums", getAlbums());
 });
 
 if (process.env.NODE_ENV === "production") {
