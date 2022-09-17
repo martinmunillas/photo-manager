@@ -3,13 +3,13 @@ import { store } from "./store";
 
 export const getPeople = () => store.get("people");
 
-export const addPerson = (person: Person) => {
+export const createPerson = (person: Person) => {
   const people = getPeople();
   people.push({ ...person, id: people.length + 1 });
   store.set("people", people);
 };
 
-export const editPerson = (person: Person) => {
+export const updatePerson = (person: Person) => {
   const people = getPeople();
   const index = people.findIndex((f) => f.id === person.id);
   if (index > -1) {

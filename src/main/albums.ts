@@ -3,13 +3,13 @@ import { store } from "./store";
 
 export const getAlbums = () => store.get("albums");
 
-export const addAlbum = (album: Album) => {
+export const createAlbum = (album: Album) => {
   const albums = getAlbums();
   albums.push({ ...album, id: albums.length + 1 });
   store.set("albums", albums);
 };
 
-export const editAlbum = (album: Album) => {
+export const updateAlbum = (album: Album) => {
   const albums = getAlbums();
   const index = albums.findIndex((f) => f.id === album.id);
   if (index > -1) {

@@ -17,8 +17,13 @@ const AlbumForm: React.FC<AlbumFormProps> = ({ album: p, onSave }) => {
     setAlbum(p);
   }, [p]);
 
+  const isUpdate = !!album.id;
+
   const save = () => {
-    window.electron.ipcRenderer.sendMessage("album", album);
+    window.electron.ipcRenderer.sendMessage(
+      isUpdate ? "updateAlbum" : "createAlbum",
+      album
+    );
     onSave?.();
   };
   return (
@@ -59,7 +64,7 @@ const AlbumForm: React.FC<AlbumFormProps> = ({ album: p, onSave }) => {
       >
         Save <IoIosSave />
       </Button>
-      {album.id && (
+      {isUpdate && (
         <Button
           bgColor="danger"
           color="white"

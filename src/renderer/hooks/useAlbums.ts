@@ -7,11 +7,11 @@ export const useAlbums = () => {
 
   useEffect(() => {
     setLoading(true);
-    window.electron.ipcRenderer.on("albums", (albums) => {
+    window.electron.ipcRenderer.on("getAlbums", (albums) => {
       setAlbums(albums as Album[]);
       setLoading(false);
     });
-    window.electron.ipcRenderer.sendMessage("albums");
+    window.electron.ipcRenderer.sendMessage("getAlbums");
   }, []);
 
   return { albums, loading };

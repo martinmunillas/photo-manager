@@ -18,8 +18,13 @@ const PersonForm: React.FC<PersonFormProps> = ({ person: p, onSave }) => {
     setPerson(p);
   }, [p]);
 
+  const isUpdate = !!person.id;
+
   const save = () => {
-    window.electron.ipcRenderer.sendMessage("person", person);
+    window.electron.ipcRenderer.sendMessage(
+      isUpdate ? "updatePerson" : "createPerson",
+      person
+    );
     onSave?.();
   };
   return (
@@ -27,6 +32,17 @@ const PersonForm: React.FC<PersonFormProps> = ({ person: p, onSave }) => {
       <Flex w="100%" height="300px" justify="center">
         <DefaultProfile />
       </Flex>
+      <FormControl label="Nickname">
+        <Input
+          value={person.nickname}
+          onChange={(e) =>
+            setPerson({
+              ...person,
+              nickname: e.target.value,
+            })
+          }
+        />
+      </FormControl>
       <FormControl label="Name">
         <Input
           value={person.name}
@@ -55,7 +71,7 @@ const PersonForm: React.FC<PersonFormProps> = ({ person: p, onSave }) => {
       >
         Save <IoIosSave />
       </Button>
-      {person.id && (
+      {isUpdate && (
         <Button
           bgColor="danger"
           color="white"

@@ -4,9 +4,10 @@ import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
-import { commitGallery, getGallery, refreshGallery } from "./gallery";
-import { addPerson, deletePerson, editPerson, getPeople } from "./people";
-import { addAlbum, deleteAlbum, editAlbum, getAlbums } from "./album";
+import { refreshGallery } from "./gallery";
+import { deletePerson, updatePerson, getPeople, createPerson } from "./people";
+import { createAlbum, deleteAlbum, updateAlbum, getAlbums } from "./albums";
+import { getPhotos, updatePhoto } from "./photos";
 
 class AppUpdater {
   constructor() {
@@ -18,71 +19,55 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on("photos", async (event, search) => {
-  search = search.toLowerCase();
-  await refreshGallery();
-  const filtered = getGallery().filter(
-    (f) =>
-      f.path?.toLocaleLowerCase().includes(search) ||
-      f.name?.toLocaleLowerCase().includes(search) ||
-      f.description?.toLocaleLowerCase().includes(search) ||
-      f.tags?.join("::").toLowerCase().includes(search)
-  );
-  event.reply("photos", filtered);
-});
-
-ipcMain.on("photo", (event, path) => {
-  const photo = getGallery().find((f) => f.path === path);
-  event.reply("photo", photo);
-});
-
 ipcMain.on("refresh", async () => {
   refreshGallery();
 });
 
+ipcMain.on("getPhotos", async (event, search) => {
+  const p = await getPhotos(search);
+  event.reply("getPhotos", p);
+});
+
 ipcMain.on("updatePhoto", (_, photo) => {
-  const gallery = getGallery();
-  const index = gallery.findIndex((f) => f.path === photo.path);
-  if (index > -1) {
-    gallery[index] = photo;
-  }
-  commitGallery(gallery);
+  updatePhoto(photo);
 });
 
-ipcMain.on("people", (event) => {
-  event.reply("people", getPeople());
+ipcMain.on("getPeople", (event) => {
+  event.reply("getPeople", getPeople());
 });
 
-ipcMain.on("person", (event, person) => {
-  if (!person.id) {
-    addPerson(person);
-  } else {
-    editPerson(person);
-  }
-  event.reply("people", getPeople());
+ipcMain.on("createPerson", (event, person) => {
+  createPerson(person);
+  event.reply("getPeople", getPeople());
+});
+
+ipcMain.on("updatePerson", (event, person) => {
+  updatePerson(person);
+  event.reply("getPeople", getPeople());
 });
 
 ipcMain.on("deletePerson", (event, id) => {
   deletePerson(id);
-  event.reply("people", getPeople());
+  event.reply("getPeople", getPeople());
 });
 
-ipcMain.on("albums", (event) => {
-  event.reply("albums", getAlbums());
+ipcMain.on("getAlbums", (event) => {
+  event.reply("getAlbums", getAlbums());
 });
 
-ipcMain.on("album", (event, album) => {
-  if (!album.id) {
-    addAlbum(album);
-  } else {
-    editAlbum(album);
-  }
-  event.reply("albums", getAlbums());
+ipcMain.on("createAlbum", (event, album) => {
+  createAlbum(album);
+  event.reply("getAlbums", getAlbums());
+});
+
+ipcMain.on("updateAlbum", (event, album) => {
+  updateAlbum(album);
+  event.reply("getAlbums", getAlbums());
 });
 
 ipcMain.on("deleteAlbum", (event, id) => {
   deleteAlbum(id);
-  event.reply("albums", getAlbums());
+  event.reply("getAlbums", getAlbums());
 });
 
 if (process.env.NODE_ENV === "production") {

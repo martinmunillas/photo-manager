@@ -7,12 +7,13 @@ export interface Photo {
   description: string;
   date: MyDate;
   tags: string[];
-  people: Person[];
+  people: number[];
 }
 
 export interface Person {
   id: number;
   name: string;
+  nickname: string;
   tags: string[];
 }
 
@@ -20,4 +21,5 @@ export interface Album {
   id: number;
   name: string;
   description: string;
+  photos: string[];
 }

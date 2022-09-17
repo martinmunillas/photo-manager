@@ -7,11 +7,11 @@ export const usePeople = () => {
 
   useEffect(() => {
     setLoading(true);
-    window.electron.ipcRenderer.on("people", (people) => {
+    window.electron.ipcRenderer.on("getPeople", (people) => {
       setPeople(people as Person[]);
       setLoading(false);
     });
-    window.electron.ipcRenderer.sendMessage("people");
+    window.electron.ipcRenderer.sendMessage("getPeople");
   }, []);
 
   return { people, loading };

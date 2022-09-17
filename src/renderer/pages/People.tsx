@@ -11,6 +11,7 @@ interface PeopleProps {}
 
 const basePerson: Omit<Person, "id"> = {
   name: "",
+  nickname: "",
   tags: [],
 };
 
@@ -84,7 +85,9 @@ const People: React.FC<PeopleProps> = ({}) => {
               </Flex>
             </Box>
             <DefaultProfile size="100px" />
-            {p.name}
+            <Text m="0" textAlign="center">
+              {p.nickname || p.name}
+            </Text>
           </Flex>
         ))}
       </Grid>
