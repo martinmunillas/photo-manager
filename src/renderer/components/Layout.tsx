@@ -1,13 +1,14 @@
-import { Box, Button, Flex, Heading } from "@quaantum/components";
+import { Box, Flex, Heading } from "@quaantum/components";
 import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { IoIosAlbums, IoMdPerson } from "react-icons/io";
+import IconButton from "./IconButton";
 
 interface LayoutProps {
   children: ReactNode | ReactNode[];
   sidebar: ReactNode;
-  onCloseSidebar: VoidFunction;
+  onCloseSidebar?: VoidFunction;
 }
 
 const Layout: React.FC<LayoutProps> = ({
@@ -33,29 +34,23 @@ const Layout: React.FC<LayoutProps> = ({
           >
             Muni Photo Manager
           </Heading>
-          <Button
+          <IconButton
             as={Link}
             // @ts-ignore
             to="/people"
-            height="fit-content"
-            d="flex"
-            alignItems="center"
-            gap="8px"
+            icon={IoMdPerson}
           >
-            People <IoMdPerson />
-          </Button>
+            People
+          </IconButton>
 
-          <Button
+          <IconButton
             as={Link}
             // @ts-ignore
             to="/albums"
-            height="fit-content"
-            d="flex"
-            alignItems="center"
-            gap="8px"
+            icon={IoIosAlbums}
           >
-            Albums <IoIosAlbums />
-          </Button>
+            Albums
+          </IconButton>
         </Flex>
         {children}
       </Box>

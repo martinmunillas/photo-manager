@@ -6,8 +6,15 @@ import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
 import { refreshGallery } from "./gallery";
 import { deletePerson, updatePerson, getPeople, createPerson } from "./people";
-import { createAlbum, deleteAlbum, updateAlbum, getAlbums } from "./albums";
+import {
+  createAlbum,
+  deleteAlbum,
+  updateAlbum,
+  getAlbums,
+  addPhotosToAlbum,
+} from "./albums";
 import { getPhotos, updatePhoto } from "./photos";
+import { Query } from "types";
 
 class AppUpdater {
   constructor() {
@@ -23,8 +30,8 @@ ipcMain.on("refresh", async () => {
   refreshGallery();
 });
 
-ipcMain.on("getPhotos", async (event, search) => {
-  const p = await getPhotos(search);
+ipcMain.on("getPhotos", async (event, query: Query) => {
+  const p = await getPhotos(query);
   event.reply("getPhotos", p);
 });
 
@@ -62,6 +69,11 @@ ipcMain.on("createAlbum", (event, album) => {
 
 ipcMain.on("updateAlbum", (event, album) => {
   updateAlbum(album);
+  event.reply("getAlbums", getAlbums());
+});
+
+ipcMain.on("addPhotosToAlbum", (event, { album, photos }) => {
+  addPhotosToAlbum(album, photos);
   event.reply("getAlbums", getAlbums());
 });
 

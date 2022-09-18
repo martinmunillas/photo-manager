@@ -51,6 +51,15 @@ export const filterWithinDate = (
   });
 };
 
+export const filterOnExactDate = (photos: Photo[], exactDate: MyDate) => {
+  return photos.filter(
+    (photo) =>
+      photo.date.year === exactDate.year &&
+      photo.date.month === exactDate.month &&
+      photo.date.day === exactDate.day
+  );
+};
+
 export const getByPeriod = (
   photos: Photo[],
   year: number,

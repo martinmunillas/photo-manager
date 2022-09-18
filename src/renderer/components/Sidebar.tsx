@@ -3,13 +3,13 @@ import React, { ReactNode, useRef } from "react";
 
 interface SidebarProps {
   children: ReactNode;
-  onClose: VoidFunction;
+  onClose?: VoidFunction;
   isOpen: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ children, onClose, isOpen }) => {
   const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside(ref, onClose);
+  useOnClickOutside(ref, () => onClose?.());
 
   return (
     <Box
@@ -24,6 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children, onClose, isOpen }) => {
       color="white"
       p={isOpen ? "16px" : 0}
       overflowY="scroll"
+      zIndex={10}
     >
       <Flex direction="column" gap="16px">
         <Flex justify="end">

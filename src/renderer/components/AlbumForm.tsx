@@ -1,9 +1,10 @@
-import { Flex, Input, Button, TextArea } from "@quaantum/components";
+import { Flex, Input, TextArea } from "@quaantum/components";
 import React, { useEffect, useState } from "react";
 import { IoIosSave, IoIosTrash } from "react-icons/io";
 import { Album } from "types";
 import DefaultProfile from "./DefaultProfile";
 import FormControl from "./FormControl";
+import IconButton from "./IconButton";
 
 interface AlbumFormProps {
   album: Partial<Album>;
@@ -53,31 +54,25 @@ const AlbumForm: React.FC<AlbumFormProps> = ({ album: p, onSave }) => {
           }
         />
       </FormControl>
-      <Button
+      <IconButton
         bgColor="primary"
         color="white"
         onClick={save}
-        d="flex"
-        alignItems="center"
-        justifyContent="center"
-        gap="8px"
+        icon={IoIosSave}
       >
-        Save <IoIosSave />
-      </Button>
+        Save
+      </IconButton>
       {isUpdate && (
-        <Button
+        <IconButton
           bgColor="danger"
           color="white"
           onClick={() =>
             window.electron.ipcRenderer.sendMessage("deleteAlbum", album.id)
           }
-          d="flex"
-          alignItems="center"
-          justifyContent="center"
-          gap="8px"
+          icon={IoIosTrash}
         >
-          Delete <IoIosTrash />
-        </Button>
+          Delete
+        </IconButton>
       )}
     </>
   );

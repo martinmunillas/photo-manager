@@ -1,9 +1,10 @@
-import { Flex, Input, Button } from "@quaantum/components";
+import { Flex, Input } from "@quaantum/components";
 import React, { useEffect, useState } from "react";
 import { IoIosSave, IoIosTrash } from "react-icons/io";
 import { Person } from "types";
 import DefaultProfile from "./DefaultProfile";
 import FormControl from "./FormControl";
+import IconButton from "./IconButton";
 import TagsManager from "./TagsManager";
 
 interface PersonFormProps {
@@ -60,31 +61,25 @@ const PersonForm: React.FC<PersonFormProps> = ({ person: p, onSave }) => {
           onChange={(t) => setPerson({ ...person, tags: t })}
         />
       </FormControl>
-      <Button
+      <IconButton
         bgColor="primary"
         color="white"
         onClick={save}
-        d="flex"
-        alignItems="center"
-        justifyContent="center"
-        gap="8px"
+        icon={IoIosSave}
       >
-        Save <IoIosSave />
-      </Button>
+        Save
+      </IconButton>
       {isUpdate && (
-        <Button
+        <IconButton
           bgColor="danger"
           color="white"
           onClick={() =>
             window.electron.ipcRenderer.sendMessage("deletePerson", person.id)
           }
-          d="flex"
-          alignItems="center"
-          justifyContent="center"
-          gap="8px"
+          icon={IoIosTrash}
         >
-          Delete <IoIosTrash />
-        </Button>
+          Delete
+        </IconButton>
       )}
     </>
   );

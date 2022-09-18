@@ -1,9 +1,10 @@
-import { Flex, Img, Input, TextArea, Button } from "@quaantum/components";
+import { Flex, Img, Input, TextArea } from "@quaantum/components";
 import React, { useEffect, useState } from "react";
 import { IoIosSave } from "react-icons/io";
 import { Photo } from "types";
 import DateField from "./DateField";
 import FormControl from "./FormControl";
+import IconButton from "./IconButton";
 import TagsManager from "./TagsManager";
 
 interface PhotoFormProps {
@@ -57,17 +58,14 @@ const PhotoForm: React.FC<PhotoFormProps> = ({ photo: p, onSave }) => {
           onChange={(t) => setPhoto({ ...photo, tags: t })}
         />
       </FormControl>
-      <Button
+      <IconButton
         bgColor="primary"
         color="white"
         onClick={update}
-        d="flex"
-        alignItems="center"
-        justifyContent="center"
-        gap="8px"
+        icon={IoIosSave}
       >
-        Save <IoIosSave />
-      </Button>
+        Save
+      </IconButton>
     </>
   );
 };

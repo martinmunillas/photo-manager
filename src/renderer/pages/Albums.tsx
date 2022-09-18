@@ -6,12 +6,15 @@ import Layout from "renderer/components/Layout";
 import AlbumForm from "renderer/components/AlbumForm";
 import { useAlbums } from "renderer/hooks/useAlbums";
 import { Album } from "types";
+import IconButton from "renderer/components/IconButton";
+import { Link } from "react-router-dom";
 
 interface AlbumsProps {}
 
 const baseAlbum: Omit<Album, "id"> = {
   name: "",
   description: "",
+  photos: [],
 };
 
 const Albums: React.FC<AlbumsProps> = ({}) => {
@@ -33,9 +36,9 @@ const Albums: React.FC<AlbumsProps> = ({}) => {
         placeItems="center"
         my="40px"
       >
-        {albums.map((p) => (
+        {albums.map((a) => (
           <Flex
-            key={p.id}
+            key={a.id}
             direction="column"
             c="white"
             align="center"
@@ -43,7 +46,7 @@ const Albums: React.FC<AlbumsProps> = ({}) => {
             position="relative"
             p="8px"
             border="1px solid"
-            borderColor={p.id === album?.id ? "white.dark" : "transparent"}
+            borderColor={a.id === album?.id ? "white.dark" : "transparent"}
             r="8px"
             customCss={`
             &:hover .hoverControls {
@@ -60,31 +63,28 @@ const Albums: React.FC<AlbumsProps> = ({}) => {
               bgColor="#00000020"
             >
               <Flex w="100%" h="100%" align="center" justify="center" gap="8px">
-                <Button
+                <IconButton
                   bgColor="primary"
                   color="white"
-                  onClick={() => setAlbum(p)}
-                  d="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  gap="8px"
+                  onClick={() => setAlbum(a)}
+                  icon={IoMdCreate}
                 >
-                  Edit <IoMdCreate />
-                </Button>
-                <Button
+                  Edit
+                </IconButton>
+                <IconButton
+                  as={Link}
+                  // @ts-ignore
+                  to={`/album/${a.id}`}
                   bgColor="secondary"
                   color="white"
-                  d="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  gap="8px"
+                  icon={IoMdGrid}
                 >
-                  View <IoMdGrid />
-                </Button>
+                  View
+                </IconButton>
               </Flex>
             </Box>
             <DefaultProfile size="100px" />
-            {p.name}
+            {a.name}
           </Flex>
         ))}
       </Grid>

@@ -9,7 +9,9 @@ export type Channels =
   | "createPerson"
   | "deletePerson"
   | "getAlbums"
+  | "getAlbum"
   | "updateAlbum"
+  | "addPhotosToAlbum"
   | "createAlbum"
   | "deleteAlbum";
 

@@ -22,4 +22,14 @@ export interface Album {
   name: string;
   description: string;
   photos: string[];
+  gallery?: Photo[];
+}
+
+export interface Query {
+  albumId?: number;
+  search?: string;
+  startDate?: MyDate;
+  endDate?: MyDate;
+  exactDate?: MyDate;
+  people?: number[];
 }

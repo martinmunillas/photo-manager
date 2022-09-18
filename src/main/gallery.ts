@@ -85,7 +85,9 @@ export const refreshGallery = async () => {
   gallery = await genGallery();
 };
 
-export const commitGallery = (g: Photo[]) => {
-  store.set("gallery", g);
-  gallery = g;
+export const commitGallery = (g?: Photo[]) => {
+  store.set("gallery", g ?? gallery);
+  if (g) {
+    gallery = g;
+  }
 };
