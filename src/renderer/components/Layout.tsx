@@ -7,7 +7,7 @@ import IconButton from "./IconButton";
 
 interface LayoutProps {
   children: ReactNode | ReactNode[];
-  sidebar: ReactNode;
+  sidebar?: ReactNode;
   onCloseSidebar?: VoidFunction;
 }
 

@@ -1,8 +1,10 @@
 import { extendTheme, QuaantumProvider, theme } from "@quaantum/components";
 import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
+import Album from "./pages/Album";
 import Albums from "./pages/Albums";
 import Gallery from "./pages/Gallery";
 import People from "./pages/People";
+import Person from "./pages/Person";
 
 const photoTheme = extendTheme(theme, {
   global: {
@@ -119,7 +121,8 @@ export default function App() {
           <Route path="/" element={<Gallery />} />
           <Route path="/people" element={<People />} />
           <Route path="/albums" element={<Albums />} />
-          <Route path="/album/:albumId" element={<Gallery />} />
+          <Route path="/album/:albumId" element={<Album />} />
+          <Route path="/person/:personId" element={<Person />} />
         </Routes>
       </Router>
     </QuaantumProvider>

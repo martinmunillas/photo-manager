@@ -3,7 +3,7 @@ import { getAlbum } from "./albums";
 import { filterOnExactDate, filterWithinDate } from "./date";
 import { commitGallery, getGallery, refreshGallery } from "./gallery";
 
-export const getPhotos = async (query: Query) => {
+export const getPhotos = async (query: Query = {}) => {
   await refreshGallery();
   let photos = getGallery();
   if (query.albumId) {

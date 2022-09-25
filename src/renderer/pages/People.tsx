@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Grid, Text } from "@quaantum/components";
 import React, { useState } from "react";
 import { IoMdCreate, IoMdGrid } from "react-icons/io";
+import { Link } from "react-router-dom";
 import DefaultProfile from "renderer/components/DefaultProfile";
 import Layout from "renderer/components/Layout";
 import PersonForm from "renderer/components/PersonForm";
@@ -73,6 +74,9 @@ const People: React.FC<PeopleProps> = ({}) => {
                   Edit <IoMdCreate />
                 </Button>
                 <Button
+                  as={Link}
+                  // @ts-ignore
+                  to={`/person/${p.id}`}
                   bgColor="secondary"
                   color="white"
                   d="flex"

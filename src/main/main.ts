@@ -5,13 +5,21 @@ import log from "electron-log";
 import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
 import { refreshGallery } from "./gallery";
-import { deletePerson, updatePerson, getPeople, createPerson } from "./people";
+import {
+  deletePerson,
+  updatePerson,
+  getPeople,
+  createPerson,
+  getPerson,
+  addPeopleToPhotos,
+} from "./people";
 import {
   createAlbum,
   deleteAlbum,
   updateAlbum,
   getAlbums,
   addPhotosToAlbum,
+  getAlbum,
 } from "./albums";
 import { getPhotos, updatePhoto } from "./photos";
 import { Query } from "types";
@@ -43,6 +51,10 @@ ipcMain.on("getPeople", (event) => {
   event.reply("getPeople", getPeople());
 });
 
+ipcMain.on("getPerson", (event, id) => {
+  event.reply("getPerson", getPerson(id));
+});
+
 ipcMain.on("createPerson", (event, person) => {
   createPerson(person);
   event.reply("getPeople", getPeople());
@@ -62,6 +74,10 @@ ipcMain.on("getAlbums", (event) => {
   event.reply("getAlbums", getAlbums());
 });
 
+ipcMain.on("getAlbum", (event, id) => {
+  event.reply("getAlbum", getAlbum(id));
+});
+
 ipcMain.on("createAlbum", (event, album) => {
   createAlbum(album);
   event.reply("getAlbums", getAlbums());
@@ -75,6 +91,11 @@ ipcMain.on("updateAlbum", (event, album) => {
 ipcMain.on("addPhotosToAlbum", (event, { album, photos }) => {
   addPhotosToAlbum(album, photos);
   event.reply("getAlbums", getAlbums());
+});
+
+ipcMain.on("addPeopleToPhotos", (event, { people, photos }) => {
+  addPeopleToPhotos(people, photos);
+  event.reply("getPhotos", getPhotos());
 });
 
 ipcMain.on("deleteAlbum", (event, id) => {

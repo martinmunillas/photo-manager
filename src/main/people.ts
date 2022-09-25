@@ -5,6 +5,11 @@ import { store } from "./store";
 
 export const getPeople = () => store.get("people");
 
+export const getPerson = (id: number) => {
+  const people = getPeople();
+  return people.find((p) => p.id === id);
+};
+
 export const createPerson = (person: Person) => {
   const people = getPeople();
   people.push({ ...person, id: people.length + 1 });
@@ -29,11 +34,11 @@ export const deletePerson = (id: number) => {
   store.set("people", people);
 };
 
-export const addPhotosToPersons = async (ids: number[], photos: string[]) => {
-  const gallery = await getPhotos("");
+export const addPeopleToPhotos = async (people: number[], photos: string[]) => {
+  const gallery = await getPhotos();
   for (let i = 0; i < photos.length; i++) {
     if (photos.includes(gallery[i].path)) {
-      gallery[i].people.push(...ids);
+      gallery[i].people.push(...people);
     }
   }
   commitGallery();
