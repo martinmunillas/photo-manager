@@ -71,6 +71,7 @@ const genGallery = async () => {
           name: "",
           people: [],
           data: getImage(path),
+          favorite: false,
         });
       }
     }

@@ -11,27 +11,30 @@ import React, { ReactNode, useState } from "react";
 import {
   IoIosAlbums,
   IoIosCloseCircleOutline,
+  IoMdHeart,
+  IoMdHeartEmpty,
   IoMdPersonAdd,
 } from "react-icons/io";
-import { useParams } from "react-router-dom";
 import { useDebounce } from "renderer/hooks/useDebounce";
 import { usePhotos } from "renderer/hooks/usePhotos";
+import { Query } from "types";
 import AddPeopleForm from "./AddPeopleForm";
 import AddToAlbumForm from "./AddToAlbumForm";
 import IconButton from "./IconButton";
 import PhotoForm from "./PhotoForm";
 import Sidebar from "./Sidebar";
 
-interface GalleryProps {}
+interface GalleryProps {
+  defaultQuery?: Query;
+}
 
-const Gallery: React.FC<GalleryProps> = ({}) => {
-  const { albumId, personId } = useParams();
+const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
   const [search, setSearch] = useState("");
   const query = useDebounce(search, 100);
-  const photos = usePhotos({
+  const { photos, reload, loading } = usePhotos({
+    ...defaultQuery,
     search: query,
-    albumId: albumId ? Number(albumId) : undefined,
-    people: [...(!!personId ? [Number(personId)] : [])],
+    people: [...(defaultQuery?.people || [])],
   });
   const [sidebar, setSidebar] = useState<ReactNode>(null);
   const [selected, setSelected] = useState<string[]>([]);
@@ -47,11 +50,32 @@ const Gallery: React.FC<GalleryProps> = ({}) => {
   };
 
   const handleAddToAlbum = () => {
-    setSidebar(<AddToAlbumForm photos={selected} onAdd={close} />);
+    setSidebar(
+      <AddToAlbumForm
+        photos={selected}
+        onAdd={() => {
+          close();
+          reload();
+        }}
+      />
+    );
   };
 
   const handleAddPeople = () => {
-    setSidebar(<AddPeopleForm photos={selected} onAdd={close} />);
+    setSidebar(
+      <AddPeopleForm
+        photos={selected}
+        onAdd={() => {
+          close();
+          reload();
+        }}
+      />
+    );
+  };
+
+  const handleToggleFavorite = (path: string) => {
+    window.electron.ipcRenderer.sendMessage("toggleFavorite", path);
+    reload();
   };
 
   return (
@@ -68,20 +92,26 @@ const Gallery: React.FC<GalleryProps> = ({}) => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      {selected.length > 0 && (
-        <Flex my="12px" gap="12px">
-          <IconButton onClick={clearSelected} icon={IoIosCloseCircleOutline}>
-            Clear {selected.length} selected
-          </IconButton>
+      {loading ? (
+        <Grid placeItems="center">
+          <Heading c="white">Loading...</Heading>
+        </Grid>
+      ) : (
+        selected.length > 0 && (
+          <Flex my="12px" gap="12px">
+            <IconButton onClick={clearSelected} icon={IoIosCloseCircleOutline}>
+              Clear {selected.length} selected
+            </IconButton>
 
-          <IconButton onClick={handleAddToAlbum} icon={IoIosAlbums}>
-            Add {selected.length} to album
-          </IconButton>
+            <IconButton onClick={handleAddToAlbum} icon={IoIosAlbums}>
+              Add {selected.length} to album
+            </IconButton>
 
-          <IconButton onClick={handleAddPeople} icon={IoMdPersonAdd}>
-            Add {selected.length} to person
-          </IconButton>
-        </Flex>
+            <IconButton onClick={handleAddPeople} icon={IoMdPersonAdd}>
+              Add {selected.length} to person
+            </IconButton>
+          </Flex>
+        )
       )}
       <Grid
         gap="16px"
@@ -94,10 +124,29 @@ const Gallery: React.FC<GalleryProps> = ({}) => {
             <Box
               key={photo.path}
               position="relative"
-              customCss="&:hover > input[type=checkbox] { display: block; }"
+              customCss="&:hover > input[type=checkbox], &:hover > button.favorite { display: block; }"
               h="100%"
               w="100%"
             >
+              <Button
+                position="absolute"
+                display="none"
+                top="16px"
+                right="40px"
+                width="24px"
+                height="24px"
+                p="0"
+                bg="transparent"
+                className="favorite"
+                m="3px 8px"
+                onClick={() => handleToggleFavorite(photo.path)}
+              >
+                {photo.favorite ? (
+                  <IoMdHeart size="100%" />
+                ) : (
+                  <IoMdHeartEmpty size="100%" />
+                )}
+              </Button>
               <Input
                 type="checkbox"
                 position="absolute"

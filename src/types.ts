@@ -8,6 +8,7 @@ export interface Photo {
   date: MyDate;
   tags: string[];
   people: number[];
+  favorite: boolean;
 }
 
 export interface Person {
@@ -32,4 +33,5 @@ export interface Query {
   endDate?: MyDate;
   exactDate?: MyDate;
   people?: number[];
+  favorite?: boolean;
 }

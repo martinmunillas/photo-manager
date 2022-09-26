@@ -13,7 +13,7 @@ const Album: React.FC<AlbumProps> = ({}) => {
   return (
     <Layout>
       <Heading>{album?.name}</Heading>
-      <Gallery />
+      <Gallery defaultQuery={{ albumId }} />
     </Layout>
   );
 };

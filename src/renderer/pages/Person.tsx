@@ -13,7 +13,7 @@ const Person: React.FC<PersonProps> = ({}) => {
   return (
     <Layout>
       <Heading>{person?.name}</Heading>
-      <Gallery />
+      <Gallery defaultQuery={{ people: [personId] }} />
     </Layout>
   );
 };

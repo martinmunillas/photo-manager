@@ -2,7 +2,7 @@ import { Box, Flex, Heading } from "@quaantum/components";
 import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { IoIosAlbums, IoMdPerson } from "react-icons/io";
+import { IoIosAlbums, IoMdHeart, IoMdPerson } from "react-icons/io";
 import IconButton from "./IconButton";
 
 interface LayoutProps {
@@ -50,6 +50,15 @@ const Layout: React.FC<LayoutProps> = ({
             icon={IoIosAlbums}
           >
             Albums
+          </IconButton>
+
+          <IconButton
+            as={Link}
+            // @ts-ignore
+            to="/favorites"
+            icon={IoMdHeart}
+          >
+            Favorites
           </IconButton>
         </Flex>
         {children}

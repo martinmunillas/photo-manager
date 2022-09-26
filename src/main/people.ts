@@ -1,6 +1,5 @@
 import { Person } from "types";
-import { commitGallery } from "./gallery";
-import { getPhotos } from "./photos";
+import { commitGallery, getGallery } from "./gallery";
 import { store } from "./store";
 
 export const getPeople = () => store.get("people");
@@ -35,8 +34,8 @@ export const deletePerson = (id: number) => {
 };
 
 export const addPeopleToPhotos = async (people: number[], photos: string[]) => {
-  const gallery = await getPhotos();
-  for (let i = 0; i < photos.length; i++) {
+  const gallery = getGallery();
+  for (let i = 0; i < gallery.length; i++) {
     if (photos.includes(gallery[i].path)) {
       gallery[i].people.push(...people);
     }

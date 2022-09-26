@@ -21,7 +21,12 @@ import {
   addPhotosToAlbum,
   getAlbum,
 } from "./albums";
-import { getPhotos, updatePhoto } from "./photos";
+import {
+  addToFavorites,
+  getPhotos,
+  toggleFavorite,
+  updatePhoto,
+} from "./photos";
 import { Query } from "types";
 
 class AppUpdater {
@@ -55,19 +60,16 @@ ipcMain.on("getPerson", (event, id) => {
   event.reply("getPerson", getPerson(id));
 });
 
-ipcMain.on("createPerson", (event, person) => {
+ipcMain.on("createPerson", (_, person) => {
   createPerson(person);
-  event.reply("getPeople", getPeople());
 });
 
-ipcMain.on("updatePerson", (event, person) => {
+ipcMain.on("updatePerson", (_, person) => {
   updatePerson(person);
-  event.reply("getPeople", getPeople());
 });
 
-ipcMain.on("deletePerson", (event, id) => {
+ipcMain.on("deletePerson", (_, id) => {
   deletePerson(id);
-  event.reply("getPeople", getPeople());
 });
 
 ipcMain.on("getAlbums", (event) => {
@@ -78,29 +80,33 @@ ipcMain.on("getAlbum", (event, id) => {
   event.reply("getAlbum", getAlbum(id));
 });
 
-ipcMain.on("createAlbum", (event, album) => {
+ipcMain.on("createAlbum", (_, album) => {
   createAlbum(album);
-  event.reply("getAlbums", getAlbums());
 });
 
-ipcMain.on("updateAlbum", (event, album) => {
+ipcMain.on("updateAlbum", (_, album) => {
   updateAlbum(album);
-  event.reply("getAlbums", getAlbums());
 });
 
-ipcMain.on("addPhotosToAlbum", (event, { album, photos }) => {
+ipcMain.on("addPhotosToAlbum", (_, { album, photos }) => {
   addPhotosToAlbum(album, photos);
-  event.reply("getAlbums", getAlbums());
 });
 
-ipcMain.on("addPeopleToPhotos", (event, { people, photos }) => {
+ipcMain.on("addPeopleToPhotos", async (_, { people, photos }) => {
+  console.log(people, photos);
   addPeopleToPhotos(people, photos);
-  event.reply("getPhotos", getPhotos());
 });
 
-ipcMain.on("deleteAlbum", (event, id) => {
+ipcMain.on("deleteAlbum", (_, id) => {
   deleteAlbum(id);
-  event.reply("getAlbums", getAlbums());
+});
+
+ipcMain.on("addToFavorites", (_, photos) => {
+  addToFavorites(photos);
+});
+
+ipcMain.on("toggleFavorite", (_, photo) => {
+  toggleFavorite(photo);
 });
 
 if (process.env.NODE_ENV === "production") {
