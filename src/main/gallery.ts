@@ -2,15 +2,11 @@ import im from "imagemagick";
 
 const ignore = [".DS_Store"];
 
-import { readdirSync, readFileSync } from "fs";
+import { readdirSync } from "fs";
 import { join } from "path";
-import { Photo } from "types";
+import { Media } from "types";
 import { dateToMyDate } from "./date";
 import { store } from "./store";
-
-export const getImage = (path: string) => {
-  return `data:image/png;base64,${readFileSync(path).toString("base64")}`;
-};
 
 const getNestedFiles = (dir: string, fileList: string[] = []) => {
   try {
@@ -42,35 +38,47 @@ interface ImageMeta {
   };
 }
 
-let gallery: Photo[] = [];
+let gallery: Media[] = [];
 
 export const getGallery = () => gallery;
 
+export const GALLERY_FOLDER = join(__dirname, "../../../../Desktop/YES");
+
+const videoExtesions = [".mp4", ".mov", ".avi", ".mkv", ".flv", ".wmv"];
+
 const genGallery = async () => {
   try {
-    const all = getNestedFiles(join(__dirname, "../../../../Desktop/YES"));
+    // store.clear();
+    const all = getNestedFiles(GALLERY_FOLDER);
     const saved = store.get("gallery");
     for (const path of all) {
       const found = saved.find((f) => f.path === path);
+      const isVideo = videoExtesions.includes(path.slice(-4).toLowerCase());
       if (!found) {
-        const data = await new Promise<ImageMeta>((resolve, reject) => {
-          im.readMetadata(path, (err, meta) => {
-            if (err) {
-              reject(err);
-            }
-            resolve(meta);
-          });
-        });
         saved.push({
           path,
+          src: `http://localhost:8900/${path.split(GALLERY_FOLDER)[1]}`,
           tags: [],
+          type: isVideo ? "video" : "image",
           date: dateToMyDate(
-            new Date(data.exif?.dateTimeOriginal || Date.now())
+            new Date(
+              (!isVideo &&
+                (
+                  await new Promise<ImageMeta>((resolve, reject) => {
+                    im.readMetadata(path, (err, meta) => {
+                      if (err) {
+                        reject(err);
+                      }
+                      resolve(meta);
+                    });
+                  })
+                ).exif?.dateTimeOriginal) ||
+                Date.now()
+            )
           ),
-          description: data.exif?.userComment || "",
+          description: "",
           name: "",
           people: [],
-          data: getImage(path),
           favorite: false,
         });
       }
@@ -86,7 +94,7 @@ export const refreshGallery = async () => {
   gallery = await genGallery();
 };
 
-export const commitGallery = (g?: Photo[]) => {
+export const commitGallery = (g?: Media[]) => {
   store.set("gallery", g ?? gallery);
   if (g) {
     gallery = g;

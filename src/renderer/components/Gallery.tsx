@@ -11,12 +11,13 @@ import React, { ReactNode, useState } from "react";
 import {
   IoIosAlbums,
   IoIosCloseCircleOutline,
+  IoMdCreate,
   IoMdHeart,
   IoMdHeartEmpty,
   IoMdPersonAdd,
 } from "react-icons/io";
 import { useDebounce } from "renderer/hooks/useDebounce";
-import { usePhotos } from "renderer/hooks/usePhotos";
+import { useMedia } from "renderer/hooks/usePhotos";
 import { Query } from "types";
 import AddPeopleForm from "./AddPeopleForm";
 import AddToAlbumForm from "./AddToAlbumForm";
@@ -31,7 +32,7 @@ interface GalleryProps {
 const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
   const [search, setSearch] = useState("");
   const query = useDebounce(search, 100);
-  const { photos, reload, loading } = usePhotos({
+  const { media, reload, loading } = useMedia({
     ...defaultQuery,
     search: query,
     people: [...(defaultQuery?.people || [])],
@@ -119,15 +120,32 @@ const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
         gridAutoRows="200px"
         placeItems="stretch"
       >
-        {photos.length ? (
-          photos.map((photo) => (
+        {media.length ? (
+          media.map((m) => (
             <Box
-              key={photo.path}
+              key={m.path}
               position="relative"
               customCss="&:hover > input[type=checkbox], &:hover > button.favorite { display: block; }"
               h="100%"
               w="100%"
             >
+              <Button
+                position="absolute"
+                display="none"
+                top="16px"
+                right="68px"
+                width="24px"
+                height="24px"
+                p="0"
+                bg="transparent"
+                className="favorite"
+                m="3px 8px"
+                onClick={() =>
+                  setSidebar(<PhotoForm photo={m} onSave={close} />)
+                }
+              >
+                <IoMdCreate size="100%" />
+              </Button>
               <Button
                 position="absolute"
                 display="none"
@@ -139,9 +157,9 @@ const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
                 bg="transparent"
                 className="favorite"
                 m="3px 8px"
-                onClick={() => handleToggleFavorite(photo.path)}
+                onClick={() => handleToggleFavorite(m.path)}
               >
-                {photo.favorite ? (
+                {m.favorite ? (
                   <IoMdHeart size="100%" />
                 ) : (
                   <IoMdHeartEmpty size="100%" />
@@ -154,19 +172,18 @@ const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
                 height="24px"
                 top="16px"
                 right="16px"
-                checked={selected.includes(photo.path)}
+                checked={selected.includes(m.path)}
                 display={selected.length ? "block" : "none"}
                 cursor="pointer"
                 onChange={() => {
-                  handleSelect(photo.path);
+                  handleSelect(m.path);
                 }}
               />
               <Button
                 onClick={() => {
-                  if (!selected.length) {
-                    setSidebar(<PhotoForm photo={photo} onSave={close} />);
+                  if (selected.length) {
+                    handleSelect(m.path);
                   } else {
-                    handleSelect(photo.path);
                   }
                 }}
                 bg="none"
@@ -179,16 +196,23 @@ const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
                 h="100%"
                 w="100%"
               >
-                {photo.data ? (
+                {m.type === "image" ? (
                   <Img
                     width="100%"
                     maxH="100%"
                     objectFit="contain"
-                    alt="icon"
-                    src={photo.data}
+                    alt={m.name}
+                    src={m.src}
                   />
                 ) : (
-                  "Image broken"
+                  <Box
+                    as="video"
+                    width="100%"
+                    maxH="100%"
+                    objectFit="contain"
+                    // @ts-ignore
+                    src={m.src}
+                  />
                 )}
               </Button>
             </Box>

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Photo, Query } from "types";
+import { Media, Query } from "types";
 
-export const usePhotos = (query: Query) => {
-  const [photos, setPhotos] = useState<Photo[]>([]);
+export const useMedia = (query: Query) => {
+  const [media, setMedia] = useState<Media[]>([]);
   const [loading, setLoading] = useState(true);
   const fetch = () => {
     window.electron.ipcRenderer.once("getPhotos", (photos) => {
-      setPhotos(photos as Photo[]);
+      setMedia(photos as Media[]);
       setLoading(false);
     });
     window.electron.ipcRenderer.sendMessage("getPhotos", query);
@@ -14,5 +14,5 @@ export const usePhotos = (query: Query) => {
 
   useEffect(fetch, [JSON.stringify(query)]);
 
-  return { photos, reload: fetch, loading };
+  return { media, reload: fetch, loading };
 };

@@ -1,4 +1,4 @@
-import { Photo } from "types";
+import { Media } from "types";
 
 export interface MyDate {
   year: number;
@@ -19,7 +19,7 @@ export const dateToMyDate = (date: Date): MyDate => {
 };
 
 export const filterWithinDate = (
-  photos: Photo[],
+  photos: Media[],
   first: MyDate | null,
   last: MyDate | null
 ) => {
@@ -51,7 +51,7 @@ export const filterWithinDate = (
   });
 };
 
-export const filterOnExactDate = (photos: Photo[], exactDate: MyDate) => {
+export const filterOnExactDate = (photos: Media[], exactDate: MyDate) => {
   return photos.filter(
     (photo) =>
       photo.date.year === exactDate.year &&
@@ -61,7 +61,7 @@ export const filterOnExactDate = (photos: Photo[], exactDate: MyDate) => {
 };
 
 export const getByPeriod = (
-  photos: Photo[],
+  photos: Media[],
   year: number,
   month?: number,
   day?: number
@@ -82,7 +82,7 @@ export const getByPeriod = (
   }
 };
 
-export const getAllYears = (photos: Photo[]) => {
+export const getAllYears = (photos: Media[]) => {
   const years = new Set<number>();
   photos.forEach((photo) => years.add(photo.date.year));
   return Array.from(years).sort((a, b) => b - a);

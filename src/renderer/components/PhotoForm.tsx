@@ -1,14 +1,14 @@
 import { Flex, Img, Input, TextArea } from "@quaantum/components";
 import React, { useEffect, useState } from "react";
 import { IoIosSave } from "react-icons/io";
-import { Photo } from "types";
+import { Media } from "types";
 import DateField from "./DateField";
 import FormControl from "./FormControl";
 import IconButton from "./IconButton";
 import TagsManager from "./TagsManager";
 
 interface PhotoFormProps {
-  photo: Photo;
+  photo: Media;
   onSave?: VoidFunction;
 }
 

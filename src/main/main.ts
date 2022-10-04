@@ -4,7 +4,8 @@ import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
 import { resolveHtmlPath } from "./util";
-import { refreshGallery } from "./gallery";
+import { GALLERY_FOLDER, refreshGallery } from "./gallery";
+import express from "express";
 import {
   deletePerson,
   updatePerson,
@@ -206,6 +207,7 @@ app.on("window-all-closed", () => {
 app
   .whenReady()
   .then(() => {
+    express().use(express.static(GALLERY_FOLDER)).listen(8900);
     createWindow();
     app.on("activate", () => {
       // On macOS it's common to re-create a window in the app when the

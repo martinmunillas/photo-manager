@@ -1,4 +1,4 @@
-import { Photo, Query } from "types";
+import { Media, Query } from "types";
 import { getAlbum } from "./albums";
 import { filterOnExactDate, filterWithinDate } from "./date";
 import { commitGallery, getGallery, refreshGallery } from "./gallery";
@@ -53,7 +53,7 @@ export const getPhotos = async (query?: Query) => {
   return photos;
 };
 
-export const updatePhoto = (photo: Photo) => {
+export const updatePhoto = (photo: Media) => {
   const gallery = getGallery();
   const index = gallery.findIndex((f) => f.path === photo.path);
   if (index > -1) {

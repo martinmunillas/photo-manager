@@ -1,8 +1,8 @@
 import Store from "electron-store";
-import { Album, Person, Photo } from "types";
+import { Album, Person, Media } from "types";
 
 interface StoreSchema {
-  gallery: Photo[];
+  gallery: Media[];
   people: Person[];
   albums: Album[];
 }

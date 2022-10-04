@@ -1,8 +1,9 @@
 import { MyDate } from "main/date";
 
-export interface Photo {
+export interface Media {
   path: string;
-  data?: string;
+  src: string;
+  type: "image" | "video";
   name: string;
   description: string;
   date: MyDate;
@@ -23,7 +24,7 @@ export interface Album {
   name: string;
   description: string;
   photos: string[];
-  gallery?: Photo[];
+  gallery?: Media[];
 }
 
 export interface Query {
