@@ -1559,10 +1559,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@quaantum/components@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@quaantum/components/-/components-0.4.0.tgz#60fe86909b092a0e15d678393f0c927ffa498b7f"
-  integrity sha512-mmanJwZOOFmb9hewVUw+67ATbgeLN+QgkFqWAW2rC/AafbkmB8tWkuSVxnnZ0AKqU30BPs3DNqHvUWXDFHLskw==
+"@quaantum/components@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@quaantum/components/-/components-0.5.0.tgz#91b3a93989db3af00478c09c093859bdd6d53240"
+  integrity sha512-vcqmOt6ZWDjb2i8UEQwM3AKss0oVyfrgnYRW+iAfWGtz22AH8uGaXnnmtAInVWtyIwVI2TSFYC44g4yOlF7AVA==
   dependencies:
     focus-trap-react "^8.5.0"
     styled-components "^5.2.1"

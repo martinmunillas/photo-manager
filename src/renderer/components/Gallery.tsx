@@ -22,6 +22,7 @@ import { Query } from "types";
 import AddPeopleForm from "./AddPeopleForm";
 import AddToAlbumForm from "./AddToAlbumForm";
 import IconButton from "./IconButton";
+import MediaViewer from "./MediaViewer";
 import PhotoForm from "./PhotoForm";
 import Sidebar from "./Sidebar";
 
@@ -31,6 +32,7 @@ interface GalleryProps {
 
 const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
   const [search, setSearch] = useState("");
+  const [viewerIdx, setViewerIdx] = useState<number>();
   const query = useDebounce(search, 100);
   const { media, reload, loading } = useMedia({
     ...defaultQuery,
@@ -121,7 +123,7 @@ const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
         placeItems="stretch"
       >
         {media.length ? (
-          media.map((m) => (
+          media.map((m, i) => (
             <Box
               key={m.path}
               position="relative"
@@ -184,6 +186,7 @@ const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
                   if (selected.length) {
                     handleSelect(m.path);
                   } else {
+                    setViewerIdx(i);
                   }
                 }}
                 bg="none"
@@ -223,6 +226,22 @@ const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
           </Grid>
         )}
       </Grid>
+      {viewerIdx !== undefined && (
+        <MediaViewer
+          media={media[viewerIdx]}
+          onPrev={() => {
+            if (viewerIdx > 0) {
+              setViewerIdx(viewerIdx - 1);
+            }
+          }}
+          onNext={() => {
+            if (viewerIdx < media.length - 1) {
+              setViewerIdx(viewerIdx + 1);
+            }
+          }}
+          onClose={() => setViewerIdx(undefined)}
+        />
+      )}
     </Box>
   );
 };
