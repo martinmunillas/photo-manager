@@ -83,9 +83,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src }) => {
       if (video.current) {
         video.current.onloadedmetadata = null;
         video.current.ontimeupdate = null;
+        video.current.onended = null;
       }
     };
   }, [video]);
+
+  useEffect(() => {
+    if (video.current) {
+      video.current.play();
+      setInfo((info) => ({
+        ...info,
+        isPlaying: true,
+      }));
+    }
+  }, [src, video]);
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (video.current) {

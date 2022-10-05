@@ -15,6 +15,7 @@ import {
   IoMdHeart,
   IoMdHeartEmpty,
   IoMdPersonAdd,
+  IoMdPlay,
 } from "react-icons/io";
 import { useDebounce } from "renderer/hooks/useDebounce";
 import { useMedia } from "renderer/hooks/usePhotos";
@@ -208,14 +209,31 @@ const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
                     src={m.src}
                   />
                 ) : (
-                  <Box
-                    as="video"
+                  <Flex
+                    justify="center"
+                    align="center"
+                    position="relative"
                     width="100%"
-                    maxH="100%"
-                    objectFit="contain"
-                    // @ts-ignore
-                    src={m.src}
-                  />
+                    h="100%"
+                  >
+                    <Box
+                      as="video"
+                      width="100%"
+                      maxH="100%"
+                      objectFit="contain"
+                      // @ts-ignore
+                      src={m.src}
+                    />
+                    <IoMdPlay
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                      }}
+                      size="24px"
+                    />
+                  </Flex>
                 )}
               </Button>
             </Box>
