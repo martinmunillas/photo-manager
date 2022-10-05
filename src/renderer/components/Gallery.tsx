@@ -128,60 +128,63 @@ const Gallery: React.FC<GalleryProps> = ({ defaultQuery }) => {
             <Box
               key={m.path}
               position="relative"
-              customCss="&:hover > input[type=checkbox], &:hover > button.favorite { display: block; }"
+              csx={{
+                "&:hover .action-buttons, &:hover .action-buttons input[type=checkbox]":
+                  { display: "block" },
+              }}
               h="100%"
               w="100%"
             >
-              <Button
+              <Flex
+                gap="8px"
                 position="absolute"
                 display="none"
-                top="16px"
-                right="68px"
-                width="24px"
-                height="24px"
-                p="0"
-                bg="transparent"
-                className="favorite"
-                m="3px 8px"
-                onClick={() =>
-                  setSidebar(<PhotoForm photo={m} onSave={close} />)
-                }
+                padding="0"
+                top="0"
+                right="0"
+                className="action-buttons"
               >
-                <IoMdCreate size="100%" />
-              </Button>
-              <Button
-                position="absolute"
-                display="none"
-                top="16px"
-                right="40px"
-                width="24px"
-                height="24px"
-                p="0"
-                bg="transparent"
-                className="favorite"
-                m="3px 8px"
-                onClick={() => handleToggleFavorite(m.path)}
-              >
-                {m.favorite ? (
-                  <IoMdHeart size="100%" />
-                ) : (
-                  <IoMdHeartEmpty size="100%" />
-                )}
-              </Button>
-              <Input
-                type="checkbox"
-                position="absolute"
-                width="24px"
-                height="24px"
-                top="16px"
-                right="16px"
-                checked={selected.includes(m.path)}
-                display={selected.length ? "block" : "none"}
-                cursor="pointer"
-                onChange={() => {
-                  handleSelect(m.path);
-                }}
-              />
+                <Button
+                  width="24px"
+                  height="24px"
+                  p="0"
+                  bg="transparent"
+                  className="favorite"
+                  m="3px 8px"
+                  onClick={() =>
+                    setSidebar(<PhotoForm photo={m} onSave={close} />)
+                  }
+                >
+                  <IoMdCreate size="100%" />
+                </Button>
+                <Button
+                  width="24px"
+                  height="24px"
+                  p="0"
+                  bg="transparent"
+                  className="favorite"
+                  m="3px 8px"
+                  onClick={() => handleToggleFavorite(m.path)}
+                >
+                  {m.favorite ? (
+                    <IoMdHeart size="100%" />
+                  ) : (
+                    <IoMdHeartEmpty size="100%" />
+                  )}
+                </Button>
+                <Input
+                  width="24px"
+                  height="24px"
+                  type="checkbox"
+                  checked={selected.includes(m.path)}
+                  display={selected.length ? "inline-block" : "none"}
+                  cursor="pointer"
+                  onChange={() => {
+                    handleSelect(m.path);
+                  }}
+                />
+              </Flex>
+
               <Button
                 onClick={() => {
                   if (selected.length) {
